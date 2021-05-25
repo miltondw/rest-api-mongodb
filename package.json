@@ -1,0 +1,34 @@
+{
+  "name": "rest-api-mongodb",
+  "version": "1.0.0",
+  "description": "rest api from blog post",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon src/server.js --exec babel-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miltondw/rest-api-mongodb.git"
+  },
+  "keywords": [
+    "mongodb",
+    "express",
+    "nodejs",
+    "babel"
+  ],
+  "author": "miltondw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miltondw/rest-api-mongodb/issues"
+  },
+  "homepage": "https://github.com/miltondw/rest-api-mongodb#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/node": "^7.14.2",
+    "@babel/preset-env": "^7.14.2"
+  }
+}
