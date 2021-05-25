@@ -1,7 +1,7 @@
 {
-  "name": "rest-api-mongodb",
+  "name": "rest-api-tasks",
   "version": "1.0.0",
-  "description": "rest api from blog post",
+  "description": "rest api from task with nodejs",
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/server.js --exec babel-node"
