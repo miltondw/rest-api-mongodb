@@ -1,10 +1,23 @@
 import Task from "../models/Task";
+import { getPagination } from "../libs/getPagination";
 const ctrlTask = {};
 
 ctrlTask.findAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json(tasks);
+    const { page, size, title } = req.query;
+    const search = title
+      ? {
+          title: { $regex: new RegExp(title), $options: "i" },
+        }
+      : {};
+    const { offset, limit } = getPagination(page, size);
+    const data = await Task.paginate(search, { offset, limit });
+    res.json({
+      totalItems: data.totalDocs,
+      tasks: data.docs,
+      totalPage: data.totalPage,
+      currentPage: data.page - 1,
+    });
   } catch (err) {
     res.status(500).json({
       message: err.message || "something goes wrong retrieving the tasks",
@@ -55,7 +68,7 @@ ctrlTask.createTask = async (req, res) => {
 ctrlTask.updateTask = async (req, res) => {
   const { id } = req.params;
   try {
-    await Task.findOneAndUpdate(id, req.body);
+    await Task.findByIdAndUpdate(id, req.body);
     res.json({ message: "Task Updated" });
   } catch (err) {
     res.status(500).json({
@@ -66,7 +79,7 @@ ctrlTask.updateTask = async (req, res) => {
 ctrlTask.deleleTask = async (req, res) => {
   const { id } = req.params;
   try {
-    await Task.findOneAndDelete(id);
+    await Task.findByIdAndDelete(id);
     res.json({ message: "Task Deleted" });
   } catch (err) {
     res.status(500).json({
