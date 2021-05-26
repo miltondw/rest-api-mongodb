@@ -12,18 +12,30 @@ ctrlTask.findAllTasks = async (req, res) => {
   }
 };
 ctrlTask.findAllDoneTasks = async (req, res) => {
-  const tasks = await Task.find({ done: true });
-  res.json(tasks);
+  try {
+    const tasks = await Task.find({ done: true });
+    res.json(tasks);
+  } catch (err) {
+    res.status(404).json({
+      message: err.message || `Not finished Task`,
+    });
+  }
 };
 ctrlTask.findOneTask = async (req, res) => {
   const { id } = req.params;
-  const task = await Task.findById(id);
-  // if (!task)
-  //   return res
-  //     .status(404)
-  //     .json({ message: `Task with id : ${id} does not exists` });
-  
-  res.json(task);
+  try {
+    const task = await Task.findById(id);
+    if (!task)
+      return res
+        .status(404)
+        .json({ message: `Task with id : ${id} does not exists` });
+
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || `Error retrieving Task with id: ${id}`,
+    });
+  }
 };
 ctrlTask.createTask = async (req, res) => {
   if (!req.body.title) {
@@ -41,12 +53,26 @@ ctrlTask.createTask = async (req, res) => {
   }
 };
 ctrlTask.updateTask = async (req, res) => {
-  await Task.findOneAndUpdate(req.params.id, req.body);
-  res.json({ message: "Task Updated" });
+  const { id } = req.params;
+  try {
+    await Task.findOneAndUpdate(id, req.body);
+    res.json({ message: "Task Updated" });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || `Cannot updated Task with id: ${id}`,
+    });
+  }
 };
 ctrlTask.deleleTask = async (req, res) => {
-  await Task.findOneAndDelete(req.params.id);
-  res.json({ message: "Task Deleted" });
+  const { id } = req.params;
+  try {
+    await Task.findOneAndDelete(id);
+    res.json({ message: "Task Deleted" });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || `Cannot delete Task with id: ${id}`,
+    });
+  }
 };
 
 export default ctrlTask;
